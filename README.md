@@ -9,8 +9,6 @@
 
 ## Installation
 
-Method 1: Direct Include
-
 Simply include the `logger.hpp` file in your project:
 ```cpp
 #include <loggerxxi/logger.hpp>
