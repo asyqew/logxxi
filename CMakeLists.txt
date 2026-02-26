@@ -1,4 +1,4 @@
-# CMakeLists.txt — Build configuration for Clixxi (header-only C++ CLI framework)
+# CMakeLists.txt — Build configuration for Logxxi (header-only C++ logger framework)
 # This file is used to compile examples and tests.
 # The library itself is header-only, so no separate library target is built.
 
@@ -6,10 +6,10 @@
 cmake_minimum_required(VERSION 3.14)
 
 # Project name, version, and language
-project(Loggerxxi
+project(Logxxi
     VERSION 0.1.0
     DESCRIPTION "A header-only C++ logger"
-    HOMEPAGE_URL "https://github.com/asyqew/loggerxxi"
+    HOMEPAGE_URL "https://github.com/asyqew/logxxi"
     LANGUAGES CXX
 )
 
@@ -25,35 +25,35 @@ else()
     add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-add_library(loggerxxi INTERFACE)
-target_include_directories(loggerxxi
+add_library(logxxi INTERFACE)
+target_include_directories(logxxi
     INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
 )
-target_compile_features(loggerxxi INTERFACE cxx_std_17)
+target_compile_features(logxxi INTERFACE cxx_std_17)
 
 include(GNUInstallDirs)
 install(
-    TARGETS loggerxxi
-    EXPORT loggerxxiTargets
+    TARGETS logxxi
+    EXPORT logxxiTargets
 )
 install(
     DIRECTORY include/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 install(
-    EXPORT loggerxxiTargets
-    FILE loggerxxiConfig.cmake
-    NAMESPACE loggerxxi::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/loggerxxi
+    EXPORT logxxiTargets
+    FILE logxxiConfig.cmake
+    NAMESPACE logxxi::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/logxxi
 )
 
 # --- Examples ---
-# Build example applications to demonstrate how to use Clixxi
+# Build example applications to demonstrate how to use Logxxi
 
 add_executable(example_hello examples/01_hello.cpp)
-target_link_libraries(example_hello PRIVATE loggerxxi)
+target_link_libraries(example_hello PRIVATE logxxi)
 
 add_executable(example_advanced examples/02_advanced.cpp)
-target_link_libraries(example_advanced PRIVATE loggerxxi)
+target_link_libraries(example_advanced PRIVATE logxxi)
