@@ -51,9 +51,19 @@ install(
 
 # --- Examples ---
 # Build example applications to demonstrate how to use Logxxi
+# Determine if Logxxi is the top-level project
+if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+    set(LOGXXI_IS_TOP_LEVEL ON)
+else()
+    set(LOGXXI_IS_TOP_LEVEL OFF)
+endif()
 
-add_executable(example_hello examples/01_hello.cpp)
-target_link_libraries(example_hello PRIVATE logxxi)
+option(LOGXXI_BUILD_EXAMPLES "Build Logxxi examples" ${LOGXXI_IS_TOP_LEVEL})
 
-add_executable(example_advanced examples/02_advanced.cpp)
-target_link_libraries(example_advanced PRIVATE logxxi)
+if(LOGXXI_BUILD_EXAMPLES)
+    add_executable(logxxi_example_hello examples/01_hello.cpp)
+    target_link_libraries(logxxi_example_hello PRIVATE logxxi)
+
+    add_executable(logxxi_example_advanced examples/02_advanced.cpp)
+    target_link_libraries(logxxi_example_advanced PRIVATE logxxi)
+endif()
