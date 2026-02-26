@@ -1,71 +1,119 @@
-# Loggerxxi
-**Loggerxxi** - A simple, header-only C++ 17 logging library with support for multiple log levels and timestamped messages.
+# Logxxi
 
-- Header-only design for easy integration
-- Multiple log levels: DEBUG, INFO, WARNING, ERROR
-- Timestamped log entries
-- Colored console output for better readability
-- Level-based filtering
+**Logxxi** is a lightweight, header-only C++ logging library with a simple API and stream-style logging support.
+It provides multiple log levels, timestamped output, and optional ANSI-colored level tags.
+
+* Header-only
+* C++17 compatible
+* Stream-style and macro-based logging
+* Minimal dependencies (standard library only)
+
+## Features
+
+* Log levels: `DEBUG`, `INFO`, `WARNING`, `ERROR`
+* ISO-like timestamp format: `YYYY-MM-DDTHH:MM:SS`
+* ANSI color support for selected levels (terminal-dependent)
+* Singleton-based logger
+* Stream-style API (`log.info << ...`)
+* Macro-based API (`LOG_INFO(...)`)
+* CMake integration via `INTERFACE` target
+
+## Requirements
+
+* C++17 or newer
+* CMake 3.14+ (for building examples or installing)
 
 ## Installation
 
-Simply include the `logger.hpp` file in your project:
-```cpp
-#include <loggerxxi/logger.hpp>
-```
+### Option 1 — As a Subdirectory (Recommended)
 
-Or add the library as a submodule or dependency in your `CMakeLists.txt`:
 ```cmake
-add_subdirectory(path/to/loggerxxi)
-target_link_libraries(your_project PRIVATE loggerxxi)
+add_subdirectory(logxxi)
+target_link_libraries(your_target PRIVATE logxxi)
 ```
 
-## Usage
-Basic Example:
+### Option 2 — Install and Use via CMake
+
+```bash
+cmake -S . -B build
+cmake --build build
+cmake --install build
+```
+
+Then in your project:
+
+```cmake
+find_package(logxxi REQUIRED)
+target_link_libraries(your_target PRIVATE logxxi::logxxi)
+```
+
+## Basic Usage
+
+Include the header:
+
 ```cpp
-#include <loggerxxi/logger.hpp>
-
-int main() {
-    // Setting the logging level to DEBUG
-    loggerxxi::Logger::getInstance().setLevel(loggerxxi::LogLevel::DEBUG);
-
-    // Demonstrating all logging levels
-    LOG_DEBUG("This is a DEBUG level message");
-    LOG_INFO("This is a INFO level message");
-    LOG_WARNING("This is a WARNING level message");
-    LOG_ERROR("This is a ERROR level message");
-
-    // Example of logging in a loop
-    for(int i = 0; i < 3; ++i) {
-        LOG_INFO("Loop iteration: " + std::to_string(i));
-    }
-
-    return 0;
-}
+#include <logxxi/logger.hpp>
 ```
 
-## API Reference
-Log Levels:
-- DEBUG: Detailed debug information
-- INFO: General information
-- WARNING: Potential issues
-- ERROR: Critical errors
+### Macro-based Logging
 
-Logging Methods:
-- setLevel(LogLevel level): Set the minimum log level to display
-- getLevel(): Get the current log level
-- debug(const std::string& message)
-- info(const std::string& message)
-- warning(const std::string& message)
-- error(const std::string& message)
+```cpp
+logxxi::Logger::getInstance().setLevel(logxxi::LogLevel::DEBUG);
 
-Macros:
-- LOG_DEBUG
-- LOG_INFO
-- LOG_WARNING
-- LOG_ERROR
+LOG_DEBUG("Debug message\n");
+LOG_INFO("Info message\n");
+LOG_WARNING("Warning message\n");
+LOG_ERROR("Error message\n");
+```
 
-## Examples
-The repository includes example projects demonstrating basic and advanced usage:
-- `examples/01_hello.cpp`: Basic logging demonstration
-- `examples/02_advanced.cpp`: Error handling and logging in functions
+### Stream-style Logging
+
+```cpp
+using namespace logxxi;
+
+Logger::getInstance().setLevel(LogLevel::INFO);
+
+log.info << "Application started" << std::endl;
+log.error << "Something went wrong" << std::endl;
+```
+
+## Log Levels
+
+| Level   | Description                     |
+| ------- | ------------------------------- |
+| DEBUG   | Detailed diagnostic information |
+| INFO    | General runtime information     |
+| WARNING | Non-critical issues             |
+| ERROR   | Serious errors                  |
+
+Messages below the currently set level are ignored.
+
+## Example Output
+
+```
+[2026-02-25T18:42:31] [INF] Application started
+[2026-02-25T18:42:31] [ERR] Something went wrong
+```
+
+(Some levels may include ANSI color codes in supported terminals.)
+
+## Project Structure
+
+```
+include/
+  loggerxxi/
+    logger.hpp
+
+examples/
+  01_hello.cpp
+  02_advanced.cpp
+
+CMakeLists.txt
+```
+
+## Design Notes
+
+* Implemented as a singleton (`Logger::getInstance()`).
+* `LogStream` buffers output and flushes on destruction (RAII-based).
+* Macros perform level checks before invoking logging logic.
+* Thread safety is not guaranteed.
