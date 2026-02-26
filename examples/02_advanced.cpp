@@ -1,6 +1,8 @@
 #include <iostream>
 #include <stdexcept>
-#include <loggerxxi/logger.hpp>
+#include <logxxi/logger.hpp>
+
+using namespace logxxi;
 
 void divide(int a, int b) {
     try {
@@ -8,23 +10,23 @@ void divide(int a, int b) {
             throw std::runtime_error("Division by zero!");
         }
         int result = a / b;
-        LOG_INFO("Division result: " + std::to_string(result));
+        log.info << "Division result: " << std::to_string(result) << std::endl;
     } catch (const std::exception& e) {
-        LOG_ERROR("Error during division: " + std::string(e.what()));
+        log.error << "Error during division: " << std::string(e.what()) << std::endl;
     }
 }
 
 int main() {
     // Setting the logging level to WARNING
-    loggerxxi::Logger::getInstance().setLevel(loggerxxi::LogLevel::WARNING);
+    Logger::getInstance().setLevel(LogLevel::INFO);
 
-    LOG_INFO("Start");
+    log.info << "Start" << std::endl;
 
     // Demonstration of error handling
     divide(10, 2);  // Successful
     divide(10, 0);  // Error
 
-    LOG_INFO("End");
+    log.info << "End" << std::endl;
 
     return 0;
 }
